@@ -2,3 +2,4 @@ Cargo.lock
 /target
 yarn.lock
 /node_modules
+/dist
