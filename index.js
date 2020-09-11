@@ -5,5 +5,5 @@ const rust = import('./pkg');
 
 rust
   //.then(m => m.greet('World!'))
-	.then(m => console.log("1 + " + m.return_string()))
+	.then(m => console.log(m.chart("C")))
   .catch(console.error);

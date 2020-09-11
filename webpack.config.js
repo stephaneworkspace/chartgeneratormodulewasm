@@ -21,5 +21,6 @@ module.exports = {
           TextEncoder: ['text-encoding', 'TextEncoder']
         })
     ],
-    mode: 'development'
+    //mode: 'development'
+	  mode: 'production',
 };

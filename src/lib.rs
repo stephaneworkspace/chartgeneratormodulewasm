@@ -1,3 +1,6 @@
+extern crate base64;
+use base64::encode;
+use chartgeneratorsvg::{StructChart, TraitDraw};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -10,14 +13,19 @@ extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 }
-
+/*
 #[wasm_bindgen]
 pub fn greet(name: &str) {
     log("OK !");
     alert(&format!("Hello, {}!", name));
-}
+}*/
 
 #[wasm_bindgen]
-pub fn return_string() -> String {
-    "hello".into()
+pub fn chart(note: &str) -> String {
+    let chart: StructChart =
+        StructChart::new(note, 0, chartgeneratorsvg::Tuning::C);
+    let svg = chart.draw_base();
+    let enc = encode(&svg.to_string());
+    enc.into()
+    //"hello".into()
 }
