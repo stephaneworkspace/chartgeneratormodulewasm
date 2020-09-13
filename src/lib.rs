@@ -21,9 +21,9 @@ pub fn greet(name: &str) {
 }*/
 
 #[wasm_bindgen]
-pub fn chart(note: &str) -> String {
+pub fn chart(note: &str, fret: u8) -> String {
     let chart: StructChart =
-        StructChart::new(note, 0, chartgeneratorsvg::Tuning::C);
+        StructChart::new(note, fret, chartgeneratorsvg::Tuning::C);
     let svg = chart.draw_base();
     let enc = encode(&svg.to_string());
     enc.into()
