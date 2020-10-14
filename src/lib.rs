@@ -1,6 +1,10 @@
+//extern crate libc;
+//extern crate serde;
+//extern crate serde_derive;
+
 extern crate base64;
 use base64::encode;
-use chartgeneratorsvg::{StructChart, TraitDraw};
+use chartgeneratorsvg::{chord_list_wasm, StructChart, TraitDraw};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -28,4 +32,9 @@ pub fn chart(note: &str, fret: u8) -> String {
     let enc = encode(&svg.to_string());
     enc.into()
     //"hello".into()
+}
+
+#[wasm_bindgen]
+pub fn chord_list(note: &str) -> String {
+    chord_list_wasm(note).into()
 }
