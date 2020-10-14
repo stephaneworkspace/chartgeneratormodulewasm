@@ -1,2 +1,2 @@
 #!/bin/sh
-wasm pack
+wasm-pack pack
