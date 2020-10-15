@@ -1,6 +1,4 @@
 //extern crate libc;
-//extern crate serde;
-//extern crate serde_derive;
 
 extern crate base64;
 use base64::encode;
@@ -35,6 +33,6 @@ pub fn chart(note: &str, fret: u8) -> String {
 }
 
 #[wasm_bindgen]
-pub fn chord_list(note: &str) -> String {
-    chord_list_wasm(note).into()
+pub fn chord_list() -> String {
+    chord_list_wasm().into()
 }
