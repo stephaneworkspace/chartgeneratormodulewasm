@@ -3,7 +3,8 @@
 extern crate base64;
 use base64::encode;
 use chartgeneratorsvg::{
-    chord_list_wasm, scale_list_wasm, scale_print_wasm, StructChart, TraitDraw,
+    chord_list_multiple_wasm, chord_list_wasm, scale_list_wasm,
+    scale_print_wasm, StructChart, TraitDraw,
 };
 use wasm_bindgen::prelude::*;
 
@@ -37,6 +38,11 @@ pub fn chart(note: &str, fret: u8) -> String {
 #[wasm_bindgen]
 pub fn chord_list() -> String {
     chord_list_wasm().into()
+}
+
+#[wasm_bindgen]
+pub fn chord_list_multiple() -> String {
+    chord_list_multiple_wasm().into()
 }
 
 #[wasm_bindgen]
