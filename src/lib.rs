@@ -3,8 +3,8 @@
 extern crate base64;
 use base64::encode;
 use chartgeneratorsvg::{
-    chord_list_multiple_wasm, chord_list_wasm, scale_list_wasm,
-    scale_print_wasm, StructChart, TraitDraw,
+    chord_list_multiple_scale, chord_list_multiple_wasm, chord_list_wasm,
+    scale_list_wasm, scale_print_wasm, StructChart, TraitDraw,
 };
 use wasm_bindgen::prelude::*;
 
@@ -54,4 +54,9 @@ pub fn scale_list_select() -> String {
 pub fn scale_svg(scale: &str, note: &str) -> String {
     let scale = scale_print_wasm(scale, note);
     scale.into()
+}
+
+#[wasm_bindgen]
+pub fn scale_chord_list_multiple(scale: &str, note: &str) -> String {
+    chord_list_multiple_scale(scale, note).into()
 }
