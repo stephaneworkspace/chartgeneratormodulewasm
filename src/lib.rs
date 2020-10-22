@@ -57,6 +57,6 @@ pub fn scale_svg(scale: &str, note: &str) -> String {
 }
 
 #[wasm_bindgen]
-pub fn scale_chord_list_multiple(scale: &str, note: &str) -> String {
-    chord_list_multiple_scale(scale, note).into()
+pub fn scale_chord_list_multiple(scale: &str, note: &str, fret: u8) -> String {
+    chord_list_multiple_scale(scale, note, fret).into()
 }
