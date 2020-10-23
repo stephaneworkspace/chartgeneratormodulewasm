@@ -23,15 +23,25 @@ pub fn greet(name: &str) {
 }*/
 #[wasm_bindgen(catch)]
 impl UkuleleWasm {
-    pub fn chord_list_multiple(note: &str, fret_position: FretID) -> String {
+    pub fn new() -> UkuleleWasm {
+        UkuleleWasm {}
+    }
+
+    pub fn chord_list_multiple(
+        &self,
+        note: &str,
+        fret_position: FretID,
+    ) -> String {
         InterfaceWasm::chord_list(note, fret_position).into()
     }
 
-    pub fn scale_list_select() -> String {
+    pub fn scale_list_select(&self) -> String {
         InterfaceWasm::scale_list_wasm().into()
     }
 
+    #[wasm_bindgen(catch)]
     pub fn scale_unique_svg(
+        &self,
         scale_short: &str,
         tonic: &str,
     ) -> Result<String, JsValue> {
@@ -41,6 +51,7 @@ impl UkuleleWasm {
         }
     }
     pub fn scale_chord_list_multiple(
+        &self,
         scale_short: &str,
         tonic: &str,
         fret_position: FretID,
