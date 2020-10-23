@@ -1,11 +1,5 @@
-//extern crate libc;
-
-extern crate base64;
-use base64::encode;
-use chartgeneratorsvg::{
-    chord_list_multiple_scale, chord_list_multiple_wasm, chord_list_wasm,
-    scale_list_wasm, scale_print_wasm, StructChart, TraitDraw,
-};
+use chartgeneratorsvg::chord::FretID;
+use chartgeneratorsvg::interface::{InterfaceWasm, TraitChord, TraitScale};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -26,37 +20,25 @@ pub fn greet(name: &str) {
 }*/
 
 #[wasm_bindgen]
-pub fn chart(note: &str, fret: u8) -> String {
-    let chart: StructChart =
-        StructChart::new(note, fret, chartgeneratorsvg::Tuning::C);
-    let svg = chart.draw_base();
-    let enc = encode(&svg.to_string());
-    enc.into()
-    //"hello".into()
-}
-
-#[wasm_bindgen]
-pub fn chord_list() -> String {
-    chord_list_wasm().into()
-}
-
-#[wasm_bindgen]
-pub fn chord_list_multiple(note: &str, fret: u8) -> String {
-    chord_list_multiple_wasm(note, fret).into()
+pub fn chord_list_multiple(note: &str, fret_position: FretID) -> String {
+    InterfaceWasm::chord_list(note, fret_position).into()
 }
 
 #[wasm_bindgen]
 pub fn scale_list_select() -> String {
-    scale_list_wasm().into()
+    InterfaceWasm::scale_list_wasm().into()
 }
 
 #[wasm_bindgen]
-pub fn scale_svg(scale: &str, note: &str) -> String {
-    let scale = scale_print_wasm(scale, note);
-    scale.into()
+pub fn scale_unique_svg(scale_short: &str, tonic: &str) -> String {
+    InterfaceWasm::scale_print_wasm(scale_short, tonic).into()
 }
 
 #[wasm_bindgen]
-pub fn scale_chord_list_multiple(scale: &str, note: &str, fret: u8) -> String {
-    chord_list_multiple_scale(scale, note, fret).into()
+pub fn scale_chord_list_multiple(
+    scale_short: &str,
+    tonic: &str,
+    fret_position: FretID,
+) -> String {
+    InterfaceWasm::scale_chord_list(scale_short, tonic, fret_position).into()
 }
