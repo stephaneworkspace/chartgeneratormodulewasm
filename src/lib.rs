@@ -3,7 +3,9 @@ use chartgeneratorsvg::interface::{InterfaceWasm, TraitChord, TraitScale};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-pub struct UkuleleWasm {}
+pub struct UkuleleWasm {
+    theme: String, // TODO better later
+}
 
 #[wasm_bindgen]
 extern "C" {
@@ -23,8 +25,10 @@ pub fn greet(name: &str) {
 }*/
 #[wasm_bindgen(catch)]
 impl UkuleleWasm {
-    pub fn new() -> UkuleleWasm {
-        UkuleleWasm {}
+    pub fn new() -> Self {
+        Self {
+            theme: "dark".to_string(), // TODO better later
+        }
     }
 
     pub fn chord_list_multiple(
