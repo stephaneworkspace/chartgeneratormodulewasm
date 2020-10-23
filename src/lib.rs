@@ -3,6 +3,9 @@ use chartgeneratorsvg::interface::{InterfaceWasm, TraitChord, TraitScale};
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
+pub struct UkuleleWasm {}
+
+#[wasm_bindgen]
 extern "C" {
     fn alert(s: &str);
 }
@@ -18,27 +21,31 @@ pub fn greet(name: &str) {
     log("OK !");
     alert(&format!("Hello, {}!", name));
 }*/
+#[wasm_bindgen(catch)]
+impl UkuleleWasm {
+    pub fn chord_list_multiple(note: &str, fret_position: FretID) -> String {
+        InterfaceWasm::chord_list(note, fret_position).into()
+    }
 
-#[wasm_bindgen]
-pub fn chord_list_multiple(note: &str, fret_position: FretID) -> String {
-    InterfaceWasm::chord_list(note, fret_position).into()
-}
+    pub fn scale_list_select() -> String {
+        InterfaceWasm::scale_list_wasm().into()
+    }
 
-#[wasm_bindgen]
-pub fn scale_list_select() -> String {
-    InterfaceWasm::scale_list_wasm().into()
-}
-
-#[wasm_bindgen]
-pub fn scale_unique_svg(scale_short: &str, tonic: &str) -> String {
-    InterfaceWasm::scale_print_wasm(scale_short, tonic).into()
-}
-
-#[wasm_bindgen]
-pub fn scale_chord_list_multiple(
-    scale_short: &str,
-    tonic: &str,
-    fret_position: FretID,
-) -> String {
-    InterfaceWasm::scale_chord_list(scale_short, tonic, fret_position).into()
+    pub fn scale_unique_svg(
+        scale_short: &str,
+        tonic: &str,
+    ) -> Result<String, JsValue> {
+        match InterfaceWasm::scale_print(scale_short, tonic) {
+            Ok(res) => Ok(res),
+            Err(e) => Err(JsValue::from_str(e.name.as_str())),
+        }
+    }
+    pub fn scale_chord_list_multiple(
+        scale_short: &str,
+        tonic: &str,
+        fret_position: FretID,
+    ) -> String {
+        InterfaceWasm::scale_chord_list(scale_short, tonic, fret_position)
+            .into()
+    }
 }
