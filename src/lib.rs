@@ -41,8 +41,8 @@ pub fn chord_list() -> String {
 }
 
 #[wasm_bindgen]
-pub fn chord_list_multiple() -> String {
-    chord_list_multiple_wasm().into()
+pub fn chord_list_multiple(note: &str, fret: u8) -> String {
+    chord_list_multiple_wasm(note, fret).into()
 }
 
 #[wasm_bindgen]
