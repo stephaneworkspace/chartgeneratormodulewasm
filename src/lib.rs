@@ -25,6 +25,7 @@ pub fn greet(name: &str) {
 }*/
 #[wasm_bindgen(catch)]
 impl UkuleleWasm {
+    #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         Self {
             theme: "dark".to_string(), // TODO better later
