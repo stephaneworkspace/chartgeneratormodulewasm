@@ -37,11 +37,16 @@ impl UkuleleWasm {
     ///
     /// * `note` - Valid note (parsed after in Note::from_str) or empty/invalid
     /// for select all note
+    /// * `chord`- Valid chord (parsed after in Chord::from_str) or
+    /// 'all'/invalid for select all chord
     /// * `fret_position` - Fret position
-    ///
-    ///
-    pub fn chord_list(&self, note: &str, fret_position: FretID) -> String {
-        InterfaceWasm::chord_list(note, fret_position)
+    pub fn chord_list(
+        &self,
+        note: &str,
+        chord: &str,
+        fret_position: FretID,
+    ) -> String {
+        InterfaceWasm::chord_list(note, chord, fret_position)
     }
 
     pub fn scale_list_select(&self) -> String {
