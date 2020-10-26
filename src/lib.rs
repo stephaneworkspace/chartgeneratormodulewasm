@@ -1,5 +1,6 @@
 use chartgeneratorsvg::chord::FretID;
 use chartgeneratorsvg::interface::{InterfaceWasm, TraitChord, TraitScale};
+use ukulele_midi::SoundBytes;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -47,6 +48,33 @@ impl UkuleleWasm {
         fret_position: FretID,
     ) -> String {
         InterfaceWasm::chord_list(note, chord, fret_position)
+    }
+
+    pub fn chord_list_experimental(
+        &self,
+        note: &str,
+        chord: &str,
+        fret_position: FretID,
+    ) -> String {
+        InterfaceWasm::chord_list_experimental(note, chord, fret_position)
+    }
+
+    #[wasm_bindgen(catch)]
+    pub fn generate_wav_experimental(
+        &self,
+        semitones: &[u8],
+    ) -> Result<String, JsValue> {
+        let mut sb: SoundBytes = SoundBytes {
+            semitones_midi: semitones,
+            midi: &mut Vec::new(),
+            wav: &mut Vec::new(),
+        };
+        match sb.generate() {
+            Ok(()) => Ok(sb.encode_base64_wav()),
+            Err(err) => {
+                Err(JsValue::from_str(format!("Error: {:?}", err).as_str()))
+            } //TODO better
+        }
     }
 
     pub fn scale_list_select(&self) -> String {

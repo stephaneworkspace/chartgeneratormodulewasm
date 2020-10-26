@@ -1,6 +1,6 @@
 [package]
 name = "chartgeneratormodulewasm"
-version = "0.5.10"
+version = "0.6.0"
 authors = ["stephaneworkspace <s.bressani@bluewin.ch>"]
 edition = "2018"
 
@@ -12,6 +12,7 @@ crate-type = ["cdylib"]
 [dependencies]
 wasm-bindgen = "0.2.68"
 chartgeneratorsvg = { git = "ssh://git@github.com/stephaneworkspace/chartgeneratorsvg.git" }
+ukulele-midi = { git = "https://github.com/stephaneworkspace/ukulele-midi.git", branch = "main"}
 
 [profile.release]
 # less code to include into binary
