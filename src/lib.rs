@@ -1,6 +1,8 @@
 use chartgeneratorsvg::chord::FretID;
 use chartgeneratorsvg::interface::{InterfaceWasm, TraitChord, TraitScale};
+use std::str::FromStr;
 use ukulele_midi::SoundBytes;
+use ukulele_midi::Variant;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -62,6 +64,7 @@ impl UkuleleWasm {
     #[wasm_bindgen(catch)]
     pub fn generate_wav_experimental(
         &self,
+        variant: &str,
         semitones: &[u8],
     ) -> Result<String, JsValue> {
         let mut sb: SoundBytes = SoundBytes {
@@ -69,11 +72,23 @@ impl UkuleleWasm {
             midi: &mut Vec::new(),
             wav: &mut Vec::new(),
         };
-        match sb.generate() {
-            Ok(()) => Ok(sb.encode_base64_wav()),
-            Err(err) => {
-                Err(JsValue::from_str(format!("Error: {:?}", err).as_str()))
-            } //TODO better
+        match Variant::from_str(variant) {
+            Ok(v) => {
+                match sb.generate(v) {
+                    Ok(()) => Ok(sb.encode_base64_wav()),
+                    Err(err) => Err(JsValue::from_str(
+                        format!(
+                            "Error generate midi->wave I/O in memory: {:?}",
+                            err
+                        )
+                        .as_str(),
+                    )), //TODO better
+                }
+            }
+            Err(err) => Err(JsValue::from_str(
+                format!("Error generate midi->wave with variation: {:?}", err)
+                    .as_str(),
+            )),
         }
     }
 
