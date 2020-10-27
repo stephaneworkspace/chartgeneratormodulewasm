@@ -66,7 +66,7 @@ impl UkuleleWasm {
         &self,
         variant: &str,
         semitones: &[u8],
-        sample_ukulele: &[u8],
+        sample_ukulele: Box<[u8]>,
     ) -> Result<String, JsValue> {
         let mut sb: SoundBytes = SoundBytes {
             semitones_midi: semitones,
