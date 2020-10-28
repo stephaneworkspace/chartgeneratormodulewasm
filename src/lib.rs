@@ -22,7 +22,7 @@ extern "C" {
 #[wasm_bindgen(module = "/sample.js")]
 extern "C" {
     #[wasm_bindgen(catch)]
-    fn read_file() -> Result<Vec<u8>, JsValue>;
+    fn read_file() -> Result<Box<[u8]>, JsValue>;
 }
 
 /*
@@ -104,10 +104,6 @@ impl UkuleleWasm {
         return read_file(path: &str);
     }*/
 
-    pub fn read(&self) -> Result<Vec<u8>, JsValue> {
-        unsafe { read_file() }
-    }
-
     // TODO Option<&[u8]>
     #[wasm_bindgen(catch)]
     pub fn generate_wav_experimental_2(
@@ -120,11 +116,11 @@ impl UkuleleWasm {
             midi: &mut Vec::new(),
             wav: &mut Vec::new(),
         };
-        match self.read() {
+        match read_file() {
             Ok(sample) => {
                 match Variant::from_str(variant) {
                     Ok(v) => {
-                        match sb.generate_from_sample_base64(v, &sample[..]) {
+                        match sb.generate_from_sample_base64(v, sample) {
                             Ok(()) => Ok(sb.encode_base64_wav()),
                             Err(err) => Err(JsValue::from_str(
                                 format!(
