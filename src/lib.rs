@@ -18,6 +18,13 @@ extern "C" {
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
 }
+
+#[wasm_bindgen(module = "/sample.js")]
+extern "C" {
+    #[wasm_bindgen(catch)]
+    fn read_file() -> Result<String, JsValue>;
+}
+
 /*
 #[wasm_bindgen]
 pub fn greet(name: &str) {
@@ -91,6 +98,15 @@ impl UkuleleWasm {
             )),
         }
     }
+    /*
+    #[wasm_bindgen(catch)]
+    pub fn path_test(&self, path: &str) -> Result<String, JsValue> {
+        return read_file(path: &str);
+    }*/
+
+    pub fn read(&self) -> Result<String, JsValue> {
+        unsafe { read_file() }
+    }
 
     // TODO Option<&[u8]>
     #[wasm_bindgen(catch)]
@@ -98,7 +114,7 @@ impl UkuleleWasm {
         &self,
         variant: &str,
         semitones: &[u8],
-        sample: String,
+        sample: &[u8],
     ) -> Result<String, JsValue> {
         let mut sb: SoundBytes = SoundBytes {
             semitones_midi: semitones,
