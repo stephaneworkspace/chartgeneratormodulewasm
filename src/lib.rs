@@ -92,6 +92,39 @@ impl UkuleleWasm {
         }
     }
 
+    // TODO Option<&[u8]>
+    #[wasm_bindgen(catch)]
+    pub fn generate_wav_experimental_2(
+        &self,
+        variant: &str,
+        semitones: &[u8],
+        sample: &[u8],
+    ) -> Result<String, JsValue> {
+        let mut sb: SoundBytes = SoundBytes {
+            semitones_midi: semitones,
+            midi: &mut Vec::new(),
+            wav: &mut Vec::new(),
+        };
+        match Variant::from_str(variant) {
+            Ok(v) => {
+                match sb.generate_from_sample(v, sample) {
+                    Ok(()) => Ok(sb.encode_base64_wav()),
+                    Err(err) => Err(JsValue::from_str(
+                        format!(
+                            "Error generate midi->wave I/O in memory: {:?}",
+                            err
+                        )
+                        .as_str(),
+                    )), //TODO better
+                }
+            }
+            Err(err) => Err(JsValue::from_str(
+                format!("Error generate midi->wave with variation: {:?}", err)
+                    .as_str(),
+            )),
+        }
+    }
+
     pub fn scale_list_select(&self) -> String {
         InterfaceWasm::scale_list_wasm()
     }
