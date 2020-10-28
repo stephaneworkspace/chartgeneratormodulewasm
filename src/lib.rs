@@ -22,7 +22,7 @@ extern "C" {
 #[wasm_bindgen(module = "/sample.js")]
 extern "C" {
     #[wasm_bindgen(catch)]
-    fn read_file() -> Result<String, JsValue>;
+    fn read_file() -> Result<Vec<u8>, JsValue>;
 }
 
 /*
@@ -104,7 +104,7 @@ impl UkuleleWasm {
         return read_file(path: &str);
     }*/
 
-    pub fn read(&self) -> Result<String, JsValue> {
+    pub fn read(&self) -> Result<Vec<u8>, JsValue> {
         unsafe { read_file() }
     }
 
@@ -114,24 +114,34 @@ impl UkuleleWasm {
         &self,
         variant: &str,
         semitones: &[u8],
-        sample: &[u8],
     ) -> Result<String, JsValue> {
         let mut sb: SoundBytes = SoundBytes {
             semitones_midi: semitones,
             midi: &mut Vec::new(),
             wav: &mut Vec::new(),
         };
-        match Variant::from_str(variant) {
-            Ok(v) => {
-                match sb.generate_from_sample_base64(v, sample) {
-                    Ok(()) => Ok(sb.encode_base64_wav()),
+        match self.read() {
+            Ok(sample) => {
+                match Variant::from_str(variant) {
+                    Ok(v) => {
+                        match sb.generate_from_sample_base64(v, &sample[..]) {
+                            Ok(()) => Ok(sb.encode_base64_wav()),
+                            Err(err) => Err(JsValue::from_str(
+                                format!(
+                                    "Error generate midi->wave I/O in memory: {:?}",
+                                    err
+                                )
+                                .as_str(),
+                            )), //TODO better
+                        }
+                    }
                     Err(err) => Err(JsValue::from_str(
                         format!(
-                            "Error generate midi->wave I/O in memory: {:?}",
+                            "Error generate midi->wave with variation: {:?}",
                             err
                         )
                         .as_str(),
-                    )), //TODO better
+                    )),
                 }
             }
             Err(err) => Err(JsValue::from_str(
