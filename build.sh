@@ -8,7 +8,7 @@ rm -rf pkg
 #yarn build
 wasm-pack build --release --out-name index
 mv ./tmp.json ./pkg/package.json
-cp ./test.txt ./pkg/test.txt
+cp ./ukulele-a-440.wav ./pkg/ukulele-a-440.wav
 #--target nodejs
 # https://github.com/rustwasm/wasm-pack/issues/199 not fixed
 #wasm-pack pack

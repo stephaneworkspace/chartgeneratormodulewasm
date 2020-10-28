@@ -1,6 +1,6 @@
 [package]
 name = "chartgeneratormodulewasm"
-version = "0.7.10"
+version = "0.7.11"
 authors = ["stephaneworkspace <s.bressani@bluewin.ch>"]
 edition = "2018"
 
