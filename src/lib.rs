@@ -98,7 +98,7 @@ impl UkuleleWasm {
         &self,
         variant: &str,
         semitones: &[u8],
-        sample: &[u8],
+        sample: String,
     ) -> Result<String, JsValue> {
         let mut sb: SoundBytes = SoundBytes {
             semitones_midi: semitones,
@@ -107,7 +107,7 @@ impl UkuleleWasm {
         };
         match Variant::from_str(variant) {
             Ok(v) => {
-                match sb.generate_from_sample(v, sample) {
+                match sb.generate_from_sample_base64(v, sample) {
                     Ok(()) => Ok(sb.encode_base64_wav()),
                     Err(err) => Err(JsValue::from_str(
                         format!(
