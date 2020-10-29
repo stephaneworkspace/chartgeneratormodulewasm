@@ -61,13 +61,14 @@ impl UkuleleWasm {
     ) -> String {
         InterfaceWasm::chord_list_experimental(note, chord, fret_position)
     }
-    /*
-    #[wasm_bindgen(catch)]
-    pub fn path_test(&self, path: &str) -> Result<String, JsValue> {
-        return read_file(path: &str);
-    }*/
 
-    // TODO Option<&[u8]>
+    /// Get a Uint8Array (Javascript/Typescript) with the wav inside
+    ///
+    /// # Arguments
+    ///
+    /// * `variant` - "chord", "arp8", "arp4"
+    /// * `semitones` - array hexa midi pitch patern
+    /// * `sample_ukulele` - external sample in Uint8Array
     #[wasm_bindgen(catch)]
     pub fn generate_wav(
         &self,
