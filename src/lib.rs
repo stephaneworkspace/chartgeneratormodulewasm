@@ -19,12 +19,6 @@ extern "C" {
     fn log(s: &str);
 }
 
-#[wasm_bindgen(module = "/sample.js")]
-extern "C" {
-    #[wasm_bindgen(catch)]
-    fn read_file() -> Result<Box<[u8]>, JsValue>;
-}
-
 /*
 #[wasm_bindgen]
 pub fn greet(name: &str) {
@@ -67,37 +61,38 @@ impl UkuleleWasm {
     ) -> String {
         InterfaceWasm::chord_list_experimental(note, chord, fret_position)
     }
-
-    #[wasm_bindgen(catch)]
-    pub fn generate_wav_experimental(
-        &self,
-        variant: &str,
-        semitones: &[u8],
-    ) -> Result<String, JsValue> {
-        let mut sb: SoundBytes = SoundBytes {
-            semitones_midi: semitones,
-            midi: &mut Vec::new(),
-            wav: &mut Vec::new(),
-        };
-        match Variant::from_str(variant) {
-            Ok(v) => {
-                match sb.generate_from_base64(v) {
-                    Ok(()) => Ok(sb.encode_base64_wav()),
-                    Err(err) => Err(JsValue::from_str(
-                        format!(
-                            "Error generate midi->wave I/O in memory: {:?}",
-                            err
-                        )
-                        .as_str(),
-                    )), //TODO better
+    /*
+        #[wasm_bindgen(catch)]
+        pub fn generate_wav_experimental(
+            &self,
+            variant: &str,
+            semitones: &[u8],
+        ) -> Result<String, JsValue> {
+            let mut sb: SoundBytes = SoundBytes {
+                semitones_midi: semitones,
+                midi: &mut Vec::new(),
+                wav: &mut Vec::new(),
+            };
+            match Variant::from_str(variant) {
+                Ok(v) => {
+                    match sb.generate_from_base64(v) {
+                        Ok(()) => Ok(sb.encode_base64_wav()),
+                        Err(err) => Err(JsValue::from_str(
+                            format!(
+                                "Error generate midi->wave I/O in memory: {:?}",
+                                err
+                            )
+                            .as_str(),
+                        )), //TODO better
+                    }
                 }
+                Err(err) => Err(JsValue::from_str(
+                    format!("Error generate midi->wave with variation: {:?}", err)
+                        .as_str(),
+                )),
             }
-            Err(err) => Err(JsValue::from_str(
-                format!("Error generate midi->wave with variation: {:?}", err)
-                    .as_str(),
-            )),
         }
-    }
+    */
     /*
     #[wasm_bindgen(catch)]
     pub fn path_test(&self, path: &str) -> Result<String, JsValue> {
@@ -110,34 +105,24 @@ impl UkuleleWasm {
         &self,
         variant: &str,
         semitones: &[u8],
+        sample_ukulele: Box<[u8]>,
     ) -> Result<String, JsValue> {
         let mut sb: SoundBytes = SoundBytes {
             semitones_midi: semitones,
             midi: &mut Vec::new(),
             wav: &mut Vec::new(),
         };
-        match read_file() {
-            Ok(sample) => {
-                match Variant::from_str(variant) {
-                    Ok(v) => {
-                        match sb.generate_from_sample_base64(v, sample) {
-                            Ok(()) => Ok(sb.encode_base64_wav()),
-                            Err(err) => Err(JsValue::from_str(
-                                format!(
-                                    "Error generate midi->wave I/O in memory: {:?}",
-                                    err
-                                )
-                                .as_str(),
-                            )), //TODO better
-                        }
-                    }
+        match Variant::from_str(variant) {
+            Ok(v) => {
+                match sb.generate_from_sample_base64(v, sample_ukulele) {
+                    Ok(()) => Ok(sb.encode_base64_wav()),
                     Err(err) => Err(JsValue::from_str(
                         format!(
-                            "Error generate midi->wave with variation: {:?}",
+                            "Error generate midi->wave I/O in memory: {:?}",
                             err
                         )
                         .as_str(),
-                    )),
+                    )), //TODO better
                 }
             }
             Err(err) => Err(JsValue::from_str(
