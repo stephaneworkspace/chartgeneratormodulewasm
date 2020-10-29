@@ -62,38 +62,6 @@ impl UkuleleWasm {
         InterfaceWasm::chord_list_experimental(note, chord, fret_position)
     }
     /*
-        #[wasm_bindgen(catch)]
-        pub fn generate_wav_experimental(
-            &self,
-            variant: &str,
-            semitones: &[u8],
-        ) -> Result<String, JsValue> {
-            let mut sb: SoundBytes = SoundBytes {
-                semitones_midi: semitones,
-                midi: &mut Vec::new(),
-                wav: &mut Vec::new(),
-            };
-            match Variant::from_str(variant) {
-                Ok(v) => {
-                    match sb.generate_from_base64(v) {
-                        Ok(()) => Ok(sb.encode_base64_wav()),
-                        Err(err) => Err(JsValue::from_str(
-                            format!(
-                                "Error generate midi->wave I/O in memory: {:?}",
-                                err
-                            )
-                            .as_str(),
-                        )), //TODO better
-                    }
-                }
-                Err(err) => Err(JsValue::from_str(
-                    format!("Error generate midi->wave with variation: {:?}", err)
-                        .as_str(),
-                )),
-            }
-        }
-    */
-    /*
     #[wasm_bindgen(catch)]
     pub fn path_test(&self, path: &str) -> Result<String, JsValue> {
         return read_file(path: &str);
@@ -101,12 +69,12 @@ impl UkuleleWasm {
 
     // TODO Option<&[u8]>
     #[wasm_bindgen(catch)]
-    pub fn generate_wav_experimental_2(
+    pub fn generate_wav(
         &self,
         variant: &str,
         semitones: &[u8],
         sample_ukulele: Box<[u8]>,
-    ) -> Result<String, JsValue> {
+    ) -> Result<Vec<u8>, JsValue> {
         let mut sb: SoundBytes = SoundBytes {
             semitones_midi: semitones,
             midi: &mut Vec::new(),
@@ -114,8 +82,8 @@ impl UkuleleWasm {
         };
         match Variant::from_str(variant) {
             Ok(v) => {
-                match sb.generate_from_sample_base64(v, sample_ukulele) {
-                    Ok(()) => Ok(sb.encode_base64_wav()),
+                match sb.generate_from_buffer(v, sample_ukulele) {
+                    Ok(()) => Ok(sb.get_wav().to_vec()),
                     Err(err) => Err(JsValue::from_str(
                         format!(
                             "Error generate midi->wave I/O in memory: {:?}",
