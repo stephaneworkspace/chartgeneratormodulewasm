@@ -138,11 +138,14 @@ impl UkuleleWasm {
         scale_short: &str,
         tonic: &str,
         fret_position: FretID,
+        degre: &str,
     ) -> Result<String, JsValue> {
-        match self
-            .interface
-            .scale_chord_list(scale_short, tonic, fret_position)
-        {
+        match self.interface.scale_chord_list(
+            scale_short,
+            tonic,
+            fret_position,
+            degre,
+        ) {
             Ok(res) => Ok(res),
             Err(e) => Err(JsValue::from_str(e.name.as_str())),
         }
