@@ -1,6 +1,6 @@
 use chartgeneratorsvg::chord::FretID;
 use chartgeneratorsvg::interface::{
-    InterfaceWasm2 as InterfaceWasm, InterfaceWasmChord, InterfaceWasmScale,
+    InterfaceWasm, InterfaceWasmChord, InterfaceWasmScale,
 };
 use chartgeneratorsvg::svg_draw::Theme;
 use std::str::FromStr;
@@ -92,7 +92,7 @@ impl UkuleleWasm {
                         .as_str(),
                     )), //TODO better
                 }
-            }
+            },
             Err(err) => Err(JsValue::from_str(
                 format!("Error generate midi->wave with variation: {:?}", err)
                     .as_str(),
